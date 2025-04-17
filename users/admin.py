@@ -32,7 +32,7 @@ class ResearcherAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email', 'license_number', 'access_code')
 
     def get_accessed_professionals(self, obj):
-        return ", ".join([p.user.get_full_name() for p in obj.accessed_codes.all()])
+        return ", ".join([p.user.get_full_name() for p in obj.accessed_professionals.all()])
     get_accessed_professionals.short_description = 'Professionnels consultés'
 
 class ResearcherAccessAdmin(admin.ModelAdmin):

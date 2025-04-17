@@ -10,7 +10,14 @@
     <div class="container">
         <h1>Tableau de Bord du Chercheur</h1>
         <p>Bienvenue sur votre tableau de bord. Vous pouvez accéder aux dossiers médicaux ici.</p>
-        <a href="{% url 'view_patient_records' %}" class="btn btn-primary">Accéder aux dossiers médicaux</a>
+        <form method="post" action="{% url 'view_patient_records' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="license_number">Numéro de licence :</label>
+                <input type="text" class="form-control" id="license_number" name="license_number" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Accéder aux dossiers médicaux</button>
+        </form>
     </div>
 </body>
 </html>

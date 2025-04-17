@@ -19,11 +19,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Dossier du {{ record.created_at|date:"d/m/Y" }}</h5>
                         <p class="card-text">
-                            {% if record.description %}
-                            {{ record.description }}
-                            {% else %}
-                            Aucune description disponible.
-                            {% endif %}
+                        {{ record.details }}
                         </p>
                     </div>
                 </div>

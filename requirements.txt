@@ -1,9 +1,7 @@
-pip install --upgrade pip
 django==5.0
 python-dotenv==1.0.0
 django-crispy-forms==2.1
-pillow==10.1.0
+pillow==11.1.0
 channels==4.0.0
 daphne==4.0.0
 channels-redis==4.1.0
-

@@ -5,11 +5,11 @@ from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 from django.contrib.auth.views import LoginView
 from django.urls import reverse
-
-from .models import User, Professional, Patient, Discussion, Message, ResearcherAccess, MedicalRecord
-from .forms import UserUpdateForm, PatientUpdateForm, ContactForm  # Ajout du formulaire de contact
-from django.utils.crypto import get_random_string
 from django.utils import timezone
+import secrets
+from .models import User, Professional, Researcher, Patient, Discussion, Message, ResearcherAccess, MedicalRecord, TemporaryAccessCode
+from .forms import UserUpdateForm, PatientUpdateForm, ContactForm, GenerateAccessCodeForm, ResearcherCreationForm  # Ajout du formulaire de génération de code
+from django.utils.crypto import get_random_string
 from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail
 from django.core.cache import cache
@@ -20,42 +20,50 @@ User = get_user_model()
 class CustomLoginView(LoginView):
     template_name = 'users/login.html'
 
+    def form_valid(self, form):
+        # Appeler la méthode parent pour effectuer la connexion
+        response = super().form_valid(form)
+        
+        # Vérifier si l'option "Rester connecté" est cochée
+        if self.request.POST.get('remember_me', False):
+            # Définir la durée de session à 30 jours
+            self.request.session.set_expiry(30 * 24 * 60 * 60)  # 30 jours en secondes
+        else:
+            # Utiliser le comportement par défaut (expiration à la fermeture du navigateur)
+            self.request.session.set_expiry(0)
+        
+        return response
+
     def get_success_url(self):
         user = self.request.user
-        if user.is_researcher:
+        if user.is_staff or user.is_superuser:
+            return reverse('admin_dashboard')
+        elif user.is_researcher:
             return reverse('researcher_dashboard')
         elif user.is_professional:
             return reverse('professional_dashboard')
         elif user.is_patient:
             return reverse('patient_dashboard')
-        return super().get_success_url()
+        return reverse('home')
 
 @login_required
 def dashboard(request):
-    if request.user.is_professional:
-        professional = Professional.objects.get(user=request.user)
-        search_query = request.GET.get('search', '')
-        
-        if search_query:
-            patients = Patient.objects.filter(
-                professionals=professional,
-                user__username__icontains=search_query
-            )
-        else:
-            patients = Patient.objects.filter(professionals=professional)
-        
-        return render(request, 'users/professional_dashboard.html', {
-            'patients': patients,
-            'search_query': search_query
-        })
+    if request.user.is_staff or request.user.is_superuser:
+        return redirect('admin_dashboard')
+    elif request.user.is_professional:
+        return redirect('professional_dashboard')
+    elif request.user.is_patient:
+        return redirect('patient_dashboard')
+    elif request.user.is_researcher:
+        return redirect('researcher_dashboard')
     else:
-        return patient_dashboard(request)
+        return redirect('home')
 
 @login_required
 def add_patient(request):
     if not request.user.is_professional:
         messages.error(request, "Accès non autorisé")
-        return redirect('dashboard')
+        return redirect('professional_dashboard')
     
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -99,7 +107,7 @@ def add_patient(request):
         except Exception as e:
             messages.error(request, f"Erreur lors de la création du patient: {str(e)}")
             return render(request, 'users/add_patient.html')
-        
+    
     return render(request, 'users/add_patient.html')
 
 @login_required
@@ -138,7 +146,6 @@ def grant_access(request):
 @login_required
 def custom_logout(request):
     logout(request)
-    
     return redirect('login')
 
 @login_required
@@ -378,7 +385,12 @@ def contact_view(request):
     return render(request, 'index.html', {'form': form})
 
 @login_required
+@login_required
 def admin_dashboard(request):
+    if not request.user.is_staff and not request.user.is_superuser:
+        messages.error(request, 'Vous n\'avez pas les permissions nécessaires pour accéder à cette page.')
+        return redirect('home')
+
     users = User.objects.all()  # Fetch all users
 
     # Check for search query
@@ -503,22 +515,18 @@ def researcher_access(request):
 def researcher_dashboard(request):
     if request.method == 'POST':
         license_number = request.POST.get('license_number')
-        access_code = request.POST.get('access_code')
         
         print(f"Numéro de Licence saisi : {license_number}")  # Message de débogage
-        print(f"Code d'Accès saisi : {access_code}")  # Message de débogage
         
         try:
-            professional = Professional.objects.get(license_number=license_number, access_code=access_code)
-            researcher = request.user.researcher
-            if ResearcherAccess.objects.filter(researcher=researcher, professional=professional).exists():
+            professional = Professional.objects.get(license_number=license_number)
+            if professional.code_expiration > timezone.now():
                 print(f"Professionnel trouvé : {professional.user.username}, Licence : {professional.license_number}")  # Message de débogage
-                print(f"Objet Professional : {professional}")  # Message de débogage
                 return render(request, 'researcher/professional_records.html', {'professional': professional})
             else:
-                return render(request, 'researcher/dashboard.html', {'error': 'Accès non autorisé à ce professionnel'})
+                return render(request, 'researcher/dashboard.html', {'error': 'Le code de licence a expiré'})
         except Professional.DoesNotExist:
-            return render(request, 'researcher/dashboard.html', {'error': 'Numéro de licence ou code d\'accès invalide'})
+            return render(request, 'researcher/dashboard.html', {'error': 'Numéro de licence invalide'})
     return render(request, 'researcher/dashboard.html')
 
 from records.models import MedicalRecord
@@ -527,10 +535,10 @@ from records.models import MedicalRecord
 @login_required
 def view_patient_records(request):
     if request.method == 'POST':
-        access_code = request.POST.get('access_code')
-        professional = Professional.objects.filter(access_code=access_code).first()
+        license_number = request.POST.get('license_number')
+        professional = Professional.objects.filter(license_number=license_number).first()
         
-        if professional:
+        if professional and professional.code_expiration > timezone.now():
             patients = Patient.objects.filter(patientprofessional__professional=professional)
             medical_records = MedicalRecord.objects.filter(
                 patient__in=patients,
@@ -573,18 +581,64 @@ def access_projects(request):
     return render(request, 'researcher/access_projects.html', {'form': form})
 
 @login_required
-def access_patient_records(request):
-    if request.method == 'POST':
-        access_code = request.POST.get('access_code')
-        try:
-            professional = Professional.objects.get(access_code=access_code)
-            records = PatientRecord.objects.filter(professional=professional)
-            return render(request, 'researcher/dashboard.html', {'records': records})
-        except Professional.DoesNotExist:
-            return render(request, 'researcher/dashboard.html', {'error': 'Invalid access code'})
-    return render(request, 'researcher/dashboard.html')
-
-@login_required
 def consult_data(request):
     # Logique pour consulter les données
     return render(request, 'researcher/data.html')
+
+@login_required
+def generate_access_code(request):
+    if request.method == 'POST':
+        form = GenerateAccessCodeForm(request.POST)
+        if form.is_valid():
+            duration_hours = form.cleaned_data['duration_hours']
+            expiration_date = timezone.now() + timezone.timedelta(hours=duration_hours)
+            code = secrets.token_urlsafe(8)  # Génère un code aléatoire
+
+            # Assurez-vous que le code est unique
+            while TemporaryAccessCode.objects.filter(code=code).exists():
+                code = secrets.token_urlsafe(8)
+
+            try:
+                professional = Professional.objects.get(user=request.user)
+                access_code = TemporaryAccessCode.objects.create(
+                    code=code,
+                    professional=professional,
+                    expiration_date=expiration_date
+                )
+                return render(request, 'professional/generate_code.html', {
+                    'form': form,
+                    'access_code': access_code
+                })
+            except Professional.DoesNotExist:
+                messages.error(request, "Vous devez être un professionnel pour générer un code d'accès.")
+                return redirect('dashboard')
+    else:
+        form = GenerateAccessCodeForm()
+    return render(request, 'professional/generate_code.html', {'form': form})
+
+def researcher_register(request):
+    if request.method == 'POST':
+        form = ResearcherCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Inscription réussie !')
+            return redirect('researcher_dashboard')
+        else:
+            messages.error(request, 'Veuillez corriger les erreurs ci-dessous.')
+    else:
+        form = ResearcherCreationForm()
+    return render(request, 'users/researcher_register.html', {'form': form})
+
+@login_required
+def print_credentials(request):
+    """
+    View to print user credentials including username and access codes
+    """
+    user = request.user
+    access_codes = TemporaryAccessCode.objects.filter(user=user).order_by('-created_at')[:5]
+    
+    return render(request, 'users/print_credentials.html', {
+        'user': user,
+        'access_codes': access_codes
+    })

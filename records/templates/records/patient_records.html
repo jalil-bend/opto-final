@@ -17,7 +17,7 @@
                     <div class="record-card">
                         <div class="doctor-info">
                             <i class="fas fa-user-md"></i>
-                            Dr. {{ record.created_by.user.username }}
+                            Dr. {{ record.professional.user.first_name }} {{ record.professional.user.last_name }}
                         </div>
 
                         {% if record.description %}

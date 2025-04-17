@@ -58,6 +58,64 @@
                 </div>
 
                 <div class="mb-4">
+                    <label class="form-label">Ordonnance</label>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col">Sph</th>
+                          <th scope="col">Cyl</th>
+                          <th scope="col">Axe</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">OD</th>
+                          <td><input type="text" class="form-control" name="od_sph"></td>
+                          <td><input type="text" class="form-control" name="od_cyl"></td>
+                          <td><input type="text" class="form-control" name="od_axe"></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">OG</th>
+                          <td><input type="text" class="form-control" name="og_sph"></td>
+                          <td><input type="text" class="form-control" name="og_cyl"></td>
+                          <td><input type="text" class="form-control" name="og_axe"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table class="table mt-4">
+                      <thead>
+                        <tr>
+                          <th scope="col"></th>
+                          <th scope="col">Sph LC</th>
+                          <th scope="col">Cyl LC</th>
+                          <th scope="col">Axe LC</th>
+                          <th scope="col">DIA</th>
+                          <th scope="col">RC</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th scope="row">OD</th>
+                          <td><input type="text" class="form-control" name="od_sph_lc"></td>
+                          <td><input type="text" class="form-control" name="od_cyl_lc"></td>
+                          <td><input type="text" class="form-control" name="od_axe_lc"></td>
+                          <td><input type="text" class="form-control" name="od_dia"></td>
+                          <td><input type="text" class="form-control" name="od_rc"></td>
+                        </tr>
+                        <tr>
+                          <th scope="row">OG</th>
+                          <td><input type="text" class="form-control" name="og_sph_lc"></td>
+                          <td><input type="text" class="form-control" name="og_cyl_lc"></td>
+                          <td><input type="text" class="form-control" name="og_axe_lc"></td>
+                          <td><input type="text" class="form-control" name="og_dia"></td>
+                          <td><input type="text" class="form-control" name="og_rc"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                </div>
+
+                <div class="mb-4">
                     <label class="form-label">Autres documents</label>
                     <input type="file" class="form-control" name="file">
                 </div>
@@ -180,17 +238,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validation du formulaire
     document.getElementById('uploadForm').onsubmit = function(e) {
-        const hasFiles = imageTypes.some(type => {
-            return document.querySelectorAll(`input[name="${type}[]"]`).length > 0;
-        }) || document.querySelector('input[name="file"]').files.length > 0;
+    const hasFiles = imageTypes.some(type => {
+        return document.querySelectorAll(`input[name="${type}[]"]`).length > 0;
+    }) || document.querySelector('input[name="file"]').files.length > 0;
 
-        if (!hasFiles) {
-            e.preventDefault();
-            alert('Veuillez sélectionner au moins une image ou un document.');
-            return false;
-        }
-        return true;
-    };
+    if (!hasFiles) {
+        alert('Attention : Aucun fichier ou image n’a été ajouté.');
+    }
+    return true; // Laisse le formulaire s'envoyer quand même
+};
+
 });
 </script>
 {% endblock %}

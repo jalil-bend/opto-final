@@ -45,13 +45,29 @@ class MedicalImage(models.Model):
     def __str__(self):
         return f"{self.get_category_display()} - {self.uploaded_at.strftime('%Y-%m-%d %H:%M')}"
 
-# Modèle pour les ordonnances
+# Modèle pour les prescriptions
 class Prescription(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-    date = models.DateField(auto_now_add=True)
-    medication = models.CharField(max_length=255)
-    dosage = models.CharField(max_length=255)
-    instructions = models.TextField()
+    record = models.ForeignKey(MedicalRecord, on_delete=models.CASCADE, related_name='prescriptions')
+    od_sph = models.CharField(max_length=10, blank=True)
+    od_cyl = models.CharField(max_length=10, blank=True)
+    od_axe = models.CharField(max_length=10, blank=True)
+    og_sph = models.CharField(max_length=10, blank=True)
+    og_cyl = models.CharField(max_length=10, blank=True)
+    og_axe = models.CharField(max_length=10, blank=True)
+    od_dia = models.CharField(max_length=10, blank=True)
+    od_rc = models.CharField(max_length=10, blank=True)
+    og_dia = models.CharField(max_length=10, blank=True)
+    og_rc = models.CharField(max_length=10, blank=True)
+    od_sph_lc = models.CharField(max_length=10, blank=True)
+    od_cyl_lc = models.CharField(max_length=10, blank=True)
+    od_axe_lc = models.CharField(max_length=10, blank=True)
+    og_sph_lc = models.CharField(max_length=10, blank=True)
+    og_cyl_lc = models.CharField(max_length=10, blank=True)
+    og_axe_lc = models.CharField(max_length=10, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
 
     def __str__(self):
-        return f'Ordonnance pour {self.patient}'
+        return f"Prescription du {self.created_at.strftime('%Y-%m-%d')}"

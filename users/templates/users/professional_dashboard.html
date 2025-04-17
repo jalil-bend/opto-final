@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="container mt-4">
+    {% include 'users/includes/dashboard_header.html' %}
     <div class="row">
         <!-- Left Column - Quick Actions -->
         <div class="col-md-4">
@@ -23,8 +24,17 @@
                 <div class="card-body">
                     <h5 class="card-title">Actions rapides</h5>
                     <div class="d-grid gap-2">
+                        <a href="{% url 'add_patient' %}" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Ajouter un patient
+                        </a>
+                        <a href="{% url 'profile' %}" class="btn btn-info text-white">
+                            <i class="fas fa-user-cog"></i> Mon profil
+                        </a>
                         <a href="{% url 'discussions_list' %}" class="btn btn-info text-white">
                             <i class="fas fa-comments"></i> Mes messages
+                        </a>
+                        <a href="{% url 'generate_access_code' %}" class="btn btn-success text-white">
+                            <i class="fas fa-key"></i> Générer un code d'accès
                         </a>
                     </div>
                 </div>

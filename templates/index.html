@@ -3,156 +3,362 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style1.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/hero.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/services.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/testimonials.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style(1).css' %}">
+    <script src="{% static 'js/script.js' %}" defer></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+     rel="stylesheet">
+      <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
+      <link rel="stylesheet" href="login.html">
+      <link rel="stylesheet" href="faq.html">
     <title>OPTO DZ</title>
-    <script src="{% static 'js/carousel.js' %}" defer></script>
-    <script src="https://unpkg.com/scrollreveal"></script>
 </head>
 <body>
-    <header class="bg-light p-3">
-        <a href="#" class="logo h1">OPTO DZ</a>
-        <nav class="navigation">
-            <a href="#" class="btn btn-link">Accueil</a>
-            <a href="#services" class="btn btn-link">Services</a>
-            <a href="#tutoriel" class="btn btn-link">Tutoriels</a>
-            <a href="#contact" class="btn btn-link">Contact</a>
+
+  <div class="background"></div>
+
+    <header >
+        
+        <h2  data-aos="fade-right"><a href="#" class="logo">OPTO DZ</a></h2>
+        <nav class="navigation" data-aos="fade-down" >
+        <ul>
+            <li class="list">
+                <a href="#">
+
+                    <span class="icon">
+                        <ion-icon name="home-outline"></ion-icon>
+                    </span>
+                    <span class="text">Acceuil</span>
+                    <span class="circle"></span>
+                </a>
+            </li>
+
+
+            <li class="list"><a href="#about">
+                <span class="icon">
+                    <ion-icon name="book-outline"></ion-icon>
+                </span>
+                <span class="text">About Us</span>
+                <span class="circle"></span>
+            </a>
+            </li>
+
+            <li class="list"><a href="#services">
+                <span class="icon">
+                    <ion-icon name="eye-outline"></ion-icon>
+                </span>
+                <span class="text"> Services</span>
+                <span class="circle"></span>
+            </a>
+        </li>
+
+            <li class="list"><a href="#tutoriel">
+                <span class="icon">
+                    <ion-icon name="help-circle-outline"></ion-icon>
+            </span>
+            <span class="text">Tutoriel</span>
+            <span class="circle"></span>
+        </a>
+    </li>
+
+
+    <li class="list"><a href="#contact">
+        <span class="icon">
+            <ion-icon name="call-outline"></ion-icon>
+    </span>
+    <span class="text">Contact</span>
+    <span class="circle"></span>
+</a>
+</li>
+            
+      <div class="indicator"></div>
+        </ul>
         </nav>
+
+
+    <div class="inscription" >
+        <a href="{% url 'login' %}" class="btn btn-light btn-lg">Se connecter</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class="btn btn-light btn-lg" style="margin-left:10px;">Tableau de bord</a>
+        {% endif %}
+    </div>
+   
     </header>
+    
+    <section class="content">
+        <div class="text" data-aos="fade-up">
+        <h1 >Bienvenue sur <span >OPTO DZ</span></h1>
+        <hr>
+        <br>
+        <p>Nous sommes là pour vous aider à faire une consultation rapide </p>
+        </div>
 
-    <section class="hero bg-primary text-white text-center py-5">
-        <div class="container">
-            <h1 class="display-4">Bienvenue chez OPTO DZ</h1>
-            <p class="lead">Votre vision, notre priorité</p>
-            <a href="{% url 'login' %}" class="btn btn-light btn-lg">Se connecter</a>
+        <div class="buttons">
+        
+
+        <a href="mailto:opto_dz9@gmail.com" class="btn-12"data-aos="fade-left"><span>Contacter-nous</span></a>
+        </div>
+               <button id="btn"><ion-icon id="btn-icon" name="arrow-up-outline"></ion-icon></button>
+
+               
+
+
+               
+    </section>
+
+
+    <section id="about"  >
+        <div class="image"data-aos="fade-right">
+            <div class="image-container">
+               <img src="images/ophta.png" data-aos="fade-right" data-aos-delay="1000">
+               </div>
+        </div>
+
+        <div class="about-text" data-aos="fade-left">
+            <h1>Pourqoui <span>OPTO DZ ?</span></h1>
+            <hr>
+            <p data-aos="fade-right" data-aos-delay="500">Tous vos informations sont en securite </p>
+            <p data-aos="fade-left" data-aos-delay="600">Avec nous vous pouvez faire une consultation rapide</p>
+            <p data-aos="fade-right" data-aos-delay="700">Nous vous garantissons la confidentialite de vos données</p>
+            <p data-aos="fade-left" data-aos-delay="750">Nous vous proposons des services de qualite</p>
+            <p data-aos="fade-right" data-aos-delay="800">Nous sommes la pour vous aider</p>
+       
         </div>
     </section>
 
-    <section class="features py-5">
-        <div class="container">
-            <h2 class="text-center mb-4">Nos Services Experts</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow">
-                        <div class="card-body text-center">
-                            <i class="fas fa-eye fa-3x mb-3"></i>
-                            <h3 class="card-title">Examens de Précision</h3>
-                            <p class="card-text">Technologie de pointe pour des résultats fiables</p>
-                        </div>
+
+    <section class="cards" id="services">
+        <div class="services-title">
+        <h2 class="title" data-aos="fade-left">Nos Services</h2>
+        <hr data-aos="fade-right">
+    </div>
+    <div id="contenu">
+     
+        <div class="wrapper" data-aos="fade-down-left" data-aos-delay="500">
+            <div class="single-card">
+                <div class="front">
+                   <div class="text">
+                  <ion-icon name="document-outline"></ion-icon> 
+                  <h3>Creation des fiches cliniques</h3>
+                   </div>
+                </div>
+                <div class="back">
+                    <div class="paragraph">
+                        <p>Crée des fiches cliniques rapidement et avec sécurité</p>     
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow">
-                        <div class="card-body text-center">
-                            <i class="fas fa-glasses fa-3x mb-3"></i>
-                            <h3 class="card-title">Lunettes sur Mesure</h3>
-                            <p class="card-text">Conception personnalisée selon votre morphologie</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4 shadow">
-                        <div class="card-body text-center">
-                            <i class="fas fa-lens fa-3x mb-3"></i>
-                            <h3 class="card-title">Lentilles Innovantes</h3>
-                            <p class="card-text">Technologies dernier cri pour un confort optimal</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-    </section>
+   
+   
+   
+   
+   
+         
+        <div class="wrapper" data-aos="fade-up" data-aos-delay="600">
+           <div class="single-card">
+               <div class="front">
+                  <div class="text">
+                 <ion-icon name="person-outline"></ion-icon> 
+                 <h3>Lien interprofessionel</h3>
+                  </div>
+               </div>
+               <div class="back">
+                   <div class="paragraph">
+                       
+                       <p>Lien entre ophtalmologues optométristes pour une prise en charge visuelle optimal</p>
+                     
+                   </div>
+               </div>
+           </div>
+       </div>
+   
+   
+       <div class="wrapper" data-aos="fade-down-right" data-aos-delay="500">
+           <div class="single-card">
+               <div class="front">
+                  <div class="text">
+                   <svg xmlns="http://www.w3.org/2000/svg" height="93px" viewBox="0 -960 960 960" width="93px" fill="rgb(0,140,255)"><path d="M480-120q-151 0-255.5-46.5T120-280v-400q0-66 105.5-113T480-840q149 0 254.5 47T840-680v400q0 67-104.5 113.5T480-120Zm0-488q86 0 176.5-26.5T773-694q-27-32-117.5-59T480-780q-88 0-177 26t-117 60q28 35 116 60.5T480-608Zm-1 214q42 0 84-4.5t80.5-13.5q38.5-9 73.5-22t63-29v-155q-29 16-64 29t-74 22q-39 9-80 14t-83 5q-42 0-84-5t-80.5-14q-38.5-9-73-22T180-618v155q27 16 61 29t72.5 22q38.5 9 80.5 13.5t85 4.5Zm1 214q48 0 99-8.5t93.5-22.5q42.5-14 72-31t35.5-35v-125q-28 16-63 28.5T643.5-352q-38.5 9-80 13.5T479-334q-43 0-85-4.5T313.5-352q-38.5-9-72.5-21.5T180-402v126q5 17 34 34.5t72 31q43 13.5 94 22t100 8.5Z"/></svg>
+                 <h3>Gestion des données</h3>
+                  </div>
+               </div>
+               <div class="back">
+                   <div class="paragraph">
+                       <p>Une bibliotheque dont laquelle vous trouvez des informations sur les diffirentes anomalies</p>
+                   </div>
+               </div>
+           </div>
+       </div>
+   
+   
+   </div> 
+     </section>
 
-    <section class="services" id="services">
-        <h2 class="section-title">Nos Services Experts</h2>
-        <div class="service-grid">
-            <div class="service-card">
-                <div class="service-image" style="background-image: url('{% static 'images/service1.jpg' %}')"></div>
-                <h3>Lunettes sur Mesure</h3>
-                <p>Conception personnalisée selon votre morphologie</p>
-            </div>
-            <div class="service-card">
-                <div class="service-image" style="background-image: url('{% static 'images/service2.jpg' %}')"></div>
-                <h3>Lentilles Innovantes</h3>
-                <p>Technologies dernier cri pour un confort optimal</p>
-            </div>
-            <div class="service-card">
-                <div class="service-image" style="background-image: url('{% static 'images/service3.jpg' %}')"></div>
-                <h3>Suivi Personnalisé</h3>
-                <p>Accompagnement sur mesure à chaque étape</p>
-            </div>
-        </div>
-    </section>
+<section  class="partenaire" id="part">
+    <div class="partenaire-title" data-aos="fade-up"> Nos partenaires</div>
+    <hr class="partenaire-hr" data-aos="fade-up">
+    <br>
+<div class="slider" style="
+    --width: 100px;
+    --height: 50px;
+    --quantity: 4;
 
-    <section class="testimonials">
-        <div class="testimonial-container">
-            <div class="testimonial-slide active">
-                <blockquote>
-                    "Un service exceptionnel et des équipements high-tech"
-                </blockquote>
-                <cite>- Sarah D., Patient</cite>
-            </div>
-            <div class="testimonial-slide">
-                <blockquote>
-                    "Des professionnels à l'écoute et très compétents"
-                </blockquote>
-                <cite>- Marc L., Client</cite>
-            </div>
-            <div class="testimonial-slide">
-                <blockquote>
-                    "Résultats précis et explications claires"
-                </blockquote>
-                <cite>- Emma S., Patient</cite>
-            </div>
-        </div>
-    </section>
+" >
+    <div class="liste">
+        <div class="item" style="--postion: 1"><img src="{% static 'images/chiali.png' %}"></div>
+        <div class="item" style="--postion: 2"><img src="{% static 'images/inoof.png' %}" > </div>
+        <div class="item" style="--postion: 3"><img src="{% static 'images/nidek.png' %}"></div>
+        
+    </div>
+</section>
 
-    <section class="contact" id="contact">
-        <h2 class="title">Contactez-nous</h2>
-        <form action="/submit_contact" method="POST">
-            <div>
-                <label for="name">Nom :</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div>
-                <label for="email">Email :</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div>
-                <label for="message">Message :</label>
-                <textarea id="message" name="message" required></textarea>
-            </div>
-            <button type="submit">Envoyer</button>
-        </form>
-    </section>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-info">
-                <h3>OPTO DZ</h3>
-                <p>Pour toute question, veuillez nous contacter.</p>
-                <ul class="socials">
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Twitter</a></li>
-                    <li><a href="#">Instagram</a></li>
-                </ul>
-                <p>Adresse : 123 Rue de la Vision, Paris, France</p>
-                <p>Téléphone : +33 1 23 45 67 89</p>
-            </div>
-            <div class="about-us">
-                <h4>À Propos de Nous</h4>
-                <p>OPTO DZ est dédié à fournir des soins optométriques de qualité et à améliorer la vision de nos patients grâce à des technologies avancées et un service exceptionnel.</p>
-            </div>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345092946!2d144.9537353153151!3d-37.81627997975165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11d5c3%3A0x5045675218ceed0!2sOptometry%20Clinic!5e0!3m2!1sen!2sau!4v1616161616161!5m2!1sen!2sau" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-        </div>
-    </footer>
+     <section class="tutoriel" id="tutoriel">
+      <h2 class="title" data-aos="fade-down">Nos Tutoriels</h2>
+      <hr data-aos="fade-up">
+<div class="contenu">
+   <div class="tutoriel-card" id="vid1"  data-aos="fade-up" data-aos-delay="500">
+          <div class="tutoriel-image">
+            <video controls > 
+              <source src="https://www.youtube.com/watch?v=Yys43tMxMoc">
+            </video>
+      </div> 
+      <div class="tutoriel-info">
+          <p class="tutoriel-categorie">comment inscrivez vous sur OPTO DZ</p>
+          <strong class="tutoriel-title">
+              <span>Inscription</span>
+        
+          </strong>
+      </div>
+  </div>
+
+  <div class="tutoriel-card"data-aos="fade-down" data-aos="500">
+    <div class="tutoriel-image" id="vid2" >
+      <video controls preload="none" > 
+        <source src="https://www.youtube.com/watch?v=Yys43tMxMoc">
+      </video>
+</div> 
+<div class="tutoriel-info">
+    <p class="tutoriel-categorie">comment inscrivez vous sur OPTO DZ</p>
+    <strong class="tutoriel-title">
+        <span>Inscription</span>
+        
+    </strong>
+</div>
+</div>
+
+<div class="tutoriel-card"data-aos="fade-up" data-aos-delay="500">
+  <div class="tutoriel-image" id="vid3" >
+    <video controls > 
+      <source src="https://www.youtube.com/watch?v=Yys43tMxMoc">
+    </video>
+</div> 
+<div class="tutoriel-info">
+  <p class="tutoriel-categorie">comment inscrivez vous sur OPTO DZ</p>
+  <strong class="tutoriel-title">
+      <span>Inscription</span>
+      
+  </strong>
+</div>
+</div>
+
+
+
+</div>
+
+
+</section>
+
+     
+<footer class="footer" id="contact">
+  <div class="cta">
+      <p class="cta-text">Vous êtes pret a nous rejoindre?<br><span>Commançons nous!</span></p>
+      <a href="mailto:opto_dz9@gmail.com" class="cta-button">Contactez nous</a>
+  </div>
+  <div class="footer-content">
+      <div class="footer-section">
+          <p class="footer-brand">OPTO DZ</p>
+      </div>
+      <div class="footer-section">
+          <p class="footer-title">Nos liens</p>
+          <a href="#">Accueil</a>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#tutoriel">Tutoriels</a>
+          
+      </div>
+
+      <div class="footer-section">
+        <p class="footer-title">Nos Contact</p>
+        <a href="mailto:opto_dz9@gmail.com"> opto_dz9@gmail.com</a>
+        <a href="tel:+213 55 65 48 12">+213 55 65 48 12</a>
+        <a href="" target="_blank">Rue 18, Oran, Algerie</a>
+
+        
+        
+    </div>
+     
+      <div class="footer-section">
+          <p class="footer-title">Plus d'information</p>
+          <a href="faq.html">FAQ</a>
+          <a href="#">Termes et Conditions</a>
+          <a href="#">Politique de confidentialité</a>
+      </div>
+      <div class="footer-section">
+          <p class="footer-title">Abonnez vous</p>
+          <div class="social-icons">
+            <a class="youtube" href="#"><i class="fa-brands fa-youtube"></i></a>
+              
+              <a class="facebook" href="#"><i class="fa-brands fa-facebook"></i></a>
+                <a class="instagram"href="#"><i class="fa-brands fa-instagram"></i></a>
+          </div>
+      </div>
+  </div>
+  <section class="droit">
+   <h3>Copyright <span>@OPTO DZ</span> &copy;  </h3> 
+  </section>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+ 
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <script src="script.js"></script>
+
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      <script>
+        AOS.init(
+            {
+                duration:1000
+
+            }
+           
+        );
+      </script>
+
 </body>
 </html>
+
+
+

@@ -1,0 +1,91 @@
+<!-- Dashboard Header -->
+<div class="dashboard-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <h2 class="mb-0">
+                {% if user.is_staff %}
+                    <i class="fas fa-user-shield me-2"></i>Tableau de bord Administrateur
+                {% elif user.is_professional %}
+                    <i class="fas fa-user-md me-2"></i>Tableau de bord Professionnel
+                {% elif user.is_researcher %}
+                    <i class="fas fa-microscope me-2"></i>Tableau de bord Chercheur
+                {% elif user.is_patient %}
+                    <i class="fas fa-user me-2"></i>Tableau de bord Patient
+                {% endif %}
+            </h2>
+        </div>
+        <div class="dashboard-actions">
+            <div class="btn-group">
+                <a href="{% url 'profile' %}" class="btn btn-outline-primary" title="Mon profil">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <a href="{% url 'discussions_list' %}" class="btn btn-outline-primary" title="Messages">
+                    <i class="fas fa-comments"></i>
+                </a>
+                {% if user.is_professional %}
+                <a href="{% url 'add_patient' %}" class="btn btn-outline-primary" title="Ajouter un patient">
+                    <i class="fas fa-user-plus"></i>
+                </a>
+                {% endif %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary" title="Actualiser le tableau de bord">
+                    <i class="fas fa-sync-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-header {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+.dashboard-header h2 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.dashboard-actions .btn-group {
+    gap: 0.5rem;
+}
+
+.dashboard-actions .btn {
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.dashboard-actions .btn i {
+    font-size: 1.1rem;
+}
+
+.dashboard-actions .btn:hover {
+    transform: translateY(-2px);
+}
+
+.dashboard-actions .btn-outline-primary {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.dashboard-actions .btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dashboard-actions .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.dashboard-actions .btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+</style>

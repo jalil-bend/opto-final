@@ -14,7 +14,7 @@ def upload_record(request, patient_id):
     if request.method == 'POST':
         record = MedicalRecord.objects.create(
             patient=patient,
-            created_by=request.user.professional,
+            professional=request.user.professional,
             description=request.POST.get('description', '')
         )
 
@@ -32,6 +32,41 @@ def upload_record(request, patient_id):
                     category=category,
                     image=image_file
                 )
+
+        # Log des données de prescription
+        print("Données de prescription reçues :", {
+            'od_sph_lc': request.POST.get('od_sph_lc'),
+            'od_cyl_lc': request.POST.get('od_cyl_lc'),
+            'od_axe_lc': request.POST.get('od_axe_lc'),
+            'od_dia': request.POST.get('od_dia'),
+            'od_rc': request.POST.get('od_rc'),
+            'og_sph_lc': request.POST.get('og_sph_lc'),
+            'og_cyl_lc': request.POST.get('og_cyl_lc'),
+            'og_axe_lc': request.POST.get('og_axe_lc'),
+            'og_dia': request.POST.get('og_dia'),
+            'og_rc': request.POST.get('og_rc')
+        })
+
+        # Enregistrer les prescriptions
+        Prescription.objects.create(
+            record=record,
+            od_sph=request.POST.get('od_sph', ''),
+            od_cyl=request.POST.get('od_cyl', ''),
+            od_axe=request.POST.get('od_axe', ''),
+            og_sph=request.POST.get('og_sph', ''),
+            og_cyl=request.POST.get('og_cyl', ''),
+            og_axe=request.POST.get('og_axe', ''),
+            od_sph_lc=request.POST.get('od_sph_lc', ''),
+            od_cyl_lc=request.POST.get('od_cyl_lc', ''),
+            od_axe_lc=request.POST.get('od_axe_lc', ''),
+            od_dia=request.POST.get('od_dia', ''),
+            od_rc=request.POST.get('od_rc', ''),
+            og_sph_lc=request.POST.get('og_sph_lc', ''),
+            og_cyl_lc=request.POST.get('og_cyl_lc', ''),
+            og_axe_lc=request.POST.get('og_axe_lc', ''),
+            og_dia=request.POST.get('og_dia', ''),
+            og_rc=request.POST.get('og_rc', '')
+        )
 
         messages.success(request, 'Dossier médical créé avec succès.')
         return redirect('view_records', patient_id=patient.id)
@@ -58,7 +93,7 @@ def view_records(request, patient_id):
         raise PermissionDenied
         
     patient = get_object_or_404(Patient, id=patient_id)
-    records = MedicalRecord.objects.filter(patient=patient)
+    records = MedicalRecord.objects.filter(patient=patient).prefetch_related('prescriptions')
     
     return render(request, 'records/view_records.html', {
         'patient': patient,
@@ -67,25 +102,12 @@ def view_records(request, patient_id):
 
 @login_required
 def create_prescription(request, patient_id):
+    patient = get_object_or_404(Patient, id=patient_id)
     if not hasattr(request.user, 'professional'):
         raise PermissionDenied
 
     if request.method == 'POST':
-        patient_id = request.POST.get('patient_id')
-        medication = request.POST.get('medication')
-        dosage = request.POST.get('dosage')
-        instructions = request.POST.get('instructions')
+        # Logic to create a prescription
+        pass
 
-        patient = get_object_or_404(Patient, id=patient_id)
-        Prescription.objects.create(
-            patient=patient,
-            medication=medication,
-            dosage=dosage,
-            instructions=instructions
-        )
-
-        messages.success(request, 'Ordonnance créée avec succès.')
-        return redirect('view_records', patient_id=patient.id)  # Rediriger vers la liste des dossiers médicaux
-
-    patient = get_object_or_404(Patient, id=patient_id)
-    return render(request, 'records/create_prescription.html', {'patient': patient})  # Afficher le formulaire
+    return render(request, 'records/create_prescription.html', {'patient': patient})
