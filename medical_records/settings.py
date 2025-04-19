@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*','opto-dz-rhk5.onrender.com']
 
-
+CSRF_TRUSTED_ORIGINS = ['https://opto-dz-rhk5.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
