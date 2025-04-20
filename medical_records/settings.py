@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-pfqcbx4ch#hq1uh$be*cb3g+p2)tw=p7gtsy+b#ssbry2r+ktg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', 'opto17.onrender.com']
+ALLOWED_HOSTS = ['*','opto-dz-rhk5.onrender.com']
 
-
+CSRF_TRUSTED_ORIGINS = ['https://opto-dz-rhk5.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
