@@ -86,6 +86,14 @@
                     {% if record.prescriptions.all %}
                     <div class="mt-4">
                         <h6 class="text-muted mb-3">Ordonnances</h6>
+                        {% for prescription in record.prescriptions.all %}
+                            {% if prescription.prescription_details %}
+                                <div class="alert alert-info p-2 mb-2">
+                                    <strong>Détail ordonnance :</strong><br>
+                                    {{ prescription.prescription_details|linebreaksbr }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                         {% if record.prescriptions.first.od_sph or record.prescriptions.first.og_sph %}
                         <table class="table table-bordered">
                             <thead>

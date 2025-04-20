@@ -19,6 +19,9 @@ class MedicalRecord(models.Model):
     description = models.TextField(blank=True)
     details = models.TextField()
     file = models.FileField(upload_to='medical_records/%Y/%m/%d/', blank=True, null=True)
+    diabetique = models.BooleanField(default=False, verbose_name="Diabétique")
+    keratoconique = models.BooleanField(default=False, verbose_name="Kératoconique")
+    cataracte = models.BooleanField(default=False, verbose_name="Cataracte")
 
     class Meta:
         ordering = ['-created_at']
@@ -64,6 +67,7 @@ class Prescription(models.Model):
     og_sph_lc = models.CharField(max_length=10, blank=True)
     og_cyl_lc = models.CharField(max_length=10, blank=True)
     og_axe_lc = models.CharField(max_length=10, blank=True)
+    prescription_details = models.TextField(blank=True)  # Ordonnance médicaments/dosages/fréquences
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

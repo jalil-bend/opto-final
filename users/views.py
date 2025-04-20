@@ -295,7 +295,7 @@ def chat_view(request, discussion_id):
     })
 
 @login_required
-def upload_file(request):
+def upload_file(request, patient_id):
     if request.method == 'POST' and request.FILES.get('file'):
         discussion_id = request.POST.get('discussion_id')
         discussion = get_object_or_404(Discussion, id=discussion_id)
@@ -468,10 +468,21 @@ def professional_dashboard(request):
     if search_query:
         patients = patients.filter(user__username__icontains=search_query)  # Filter patients by username
 
+    # Préparer un dictionnaire patient_id -> statut diabétique (dernier dossier)
+    patient_diabetique = {}
+    for patient in patients:
+        # Statut historique : badge affiché si au moins un dossier médical a ce statut
+        patient.is_diabetique = patient.medical_records.filter(diabetique=True).exists()
+        patient.is_keratoconique = patient.medical_records.filter(keratoconique=True).exists()
+        # Cataracte : badge affiché si le dernier dossier médical a cataracte=True
+        last_record = patient.medical_records.order_by('-created_at').first()
+        patient.is_cataracte = last_record.cataracte if last_record else False
+
     context = {
         'professional': professional,
         'patients': patients,
         'search_query': search_query,
+        'patient_diabetique': patient_diabetique,
     }
 
     return render(request, 'users/professional_dashboard.html', context)
@@ -533,7 +544,9 @@ from records.models import MedicalRecord
 
 @csrf_protect
 @login_required
-def view_patient_records(request):
+def view_patient_records(request, patient_id):
+    patient = get_object_or_404(Patient, id=patient_id)
+    records = MedicalRecord.objects.filter(patient=patient).prefetch_related('prescriptions')
     if request.method == 'POST':
         license_number = request.POST.get('license_number')
         professional = Professional.objects.filter(license_number=license_number).first()
@@ -549,7 +562,7 @@ def view_patient_records(request):
                 'professional': professional
             })
     
-    return render(request, 'researcher/professional_records.html', {'error': 'Accès refusé'})
+    return render(request, 'records/view_records.html', {'error': 'Accès refusé', 'patient': patient, 'records': records})
 
 @login_required
 def access_projects(request):

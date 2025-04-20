@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from records import views as records_views
 
 urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name='login'),
@@ -17,7 +18,7 @@ urlpatterns = [
     path('add-patient/', views.add_patient, name='add_patient'),
     path('patient/<int:patient_id>/', views.patient_profile, name='patient_profile'),
     path('patient/<int:patient_id>/records/', views.view_patient_records, name='view_records'),
-    path('patient/<int:patient_id>/upload-record/', views.upload_file, name='upload_record_for_patient'),
+    path('patient/<int:patient_id>/upload-record/', records_views.upload_record, name='upload_record_for_patient'),
     path('profile/', views.profile, name='profile'),
     path('update-profile/', views.update_profile, name='update_profile'),
     path('view-patient-records/', views.view_patient_records, name='view_patient_records'),

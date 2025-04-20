@@ -7,6 +7,36 @@
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data" id="uploadForm">
                 {% csrf_token %}
+                <div class="form-check mb-4">
+                  <input class="form-check-input" type="checkbox" value="1" id="diabetique" name="diabetique">
+                  <label class="form-check-label" for="diabetique">
+                    Diabétique
+                  </label>
+                </div>
+                <div class="form-check mb-4">
+  <input class="form-check-input" type="checkbox" value="1" id="keratoconique" name="keratoconique">
+  <label class="form-check-label" for="keratoconique">
+    Kératoconique
+  </label>
+</div>
+<div class="form-check mb-4">
+  <input class="form-check-input" type="checkbox" value="1" id="cataracte" name="cataracte" onchange="toggleCataracteType()">
+  <label class="form-check-label" for="cataracte">
+    Cataracte
+  </label>
+</div>
+<div class="mb-4" id="cataracte-type-container" style="display:none;">
+  <label for="cataracte-type" class="form-label">Type de cataracte</label>
+  <input class="form-control" list="cataracte-types" id="cataracte-type" name="cataracte_type" autocomplete="off">
+  <datalist id="cataracte-types">
+    <option value="Cataracte nucléaire">
+    <option value="Cataracte corticale">
+    <option value="Cataracte sous-capsulaire postérieure">
+    <option value="Cataracte congénitale">
+    <option value="Cataracte traumatique">
+    <option value="Cataracte secondaire">
+  </datalist>
+</div>
                 <div class="mb-4">
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" id="description" name="description" rows="3"></textarea>
@@ -58,6 +88,7 @@
                 </div>
 
                 <div class="mb-4">
+                    <br>
                     <label class="form-label">Ordonnance</label>
                     <table class="table">
                       <thead>
@@ -66,21 +97,24 @@
                           <th scope="col">Sph</th>
                           <th scope="col">Cyl</th>
                           <th scope="col">Axe</th>
+                          <th scope="col">Add</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <th scope="row">OD</th>
-                          <td><input type="text" class="form-control" name="od_sph"></td>
-                          <td><input type="text" class="form-control" name="od_cyl"></td>
-                          <td><input type="text" class="form-control" name="od_axe"></td>
-                        </tr>
+  <th scope="row">OD</th>
+  <td><input type="text" class="form-control" name="od_sph"></td>
+  <td><input type="text" class="form-control" name="od_cyl"></td>
+  <td><input type="text" class="form-control" name="od_axe"></td>
+  <td><input type="text" class="form-control" name="od_add"></td>
+</tr>
                         <tr>
-                          <th scope="row">OG</th>
-                          <td><input type="text" class="form-control" name="og_sph"></td>
-                          <td><input type="text" class="form-control" name="og_cyl"></td>
-                          <td><input type="text" class="form-control" name="og_axe"></td>
-                        </tr>
+  <th scope="row">OG</th>
+  <td><input type="text" class="form-control" name="og_sph"></td>
+  <td><input type="text" class="form-control" name="og_cyl"></td>
+  <td><input type="text" class="form-control" name="og_axe"></td>
+  <td><input type="text" class="form-control" name="og_add"></td>
+</tr>
                       </tbody>
                     </table>
                     <table class="table mt-4">
@@ -119,7 +153,7 @@
                     <label class="form-label">Autres documents</label>
                     <input type="file" class="form-control" name="file">
                 </div>
-
+                <a href="{% url 'create_prescription' patient.id %}" class="btn btn-primary mb-3">Créer une ordonnance des médicaments</a> <br>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </form>
         </div>
@@ -249,5 +283,15 @@ document.addEventListener('DOMContentLoaded', function() {
 };
 
 });
+function toggleCataracteType() {
+  var cataracteCheckbox = document.getElementById('cataracte');
+  var cataracteTypeContainer = document.getElementById('cataracte-type-container');
+  if (cataracteCheckbox.checked) {
+    cataracteTypeContainer.style.display = 'block';
+  } else {
+    cataracteTypeContainer.style.display = 'none';
+    document.getElementById('cataracte-type').value = '';
+  }
+}
 </script>
 {% endblock %}

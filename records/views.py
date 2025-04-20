@@ -15,7 +15,10 @@ def upload_record(request, patient_id):
         record = MedicalRecord.objects.create(
             patient=patient,
             professional=request.user.professional,
-            description=request.POST.get('description', '')
+            description=request.POST.get('description', ''),
+            diabetique=bool(request.POST.get('diabetique')),
+            keratoconique=bool(request.POST.get('keratoconique')),
+            cataracte=bool(request.POST.get('cataracte'))
         )
 
         if request.FILES.get('file'):
@@ -107,7 +110,19 @@ def create_prescription(request, patient_id):
         raise PermissionDenied
 
     if request.method == 'POST':
-        # Logic to create a prescription
-        pass
+        medicaments = request.POST.getlist('medicament')
+        dosages = request.POST.getlist('dosage')
+        frequences = request.POST.getlist('frequence')
+        details = []
+        for med, dose, freq in zip(medicaments, dosages, frequences):
+            if med:
+                details.append(f"{med} | {dose} | {freq} fois/jour")
+
+        record = MedicalRecord.objects.filter(patient=patient).order_by('-created_at').first()
+        if not record:
+            record = MedicalRecord.objects.create(patient=patient, professional=request.user.professional)
+        Prescription.objects.create(record=record, prescription_details="; ".join(details))
+        messages.success(request, "Ordonnance créée avec succès.")
+        return redirect('view_records', patient_id=patient.id)
 
     return render(request, 'records/create_prescription.html', {'patient': patient})

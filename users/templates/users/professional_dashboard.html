@@ -64,7 +64,18 @@
                             <div class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="mb-1">{{ patient.user.username }}</h6>
+                                        <h6 class="mb-1">
+                                            {{ patient.user.username }}
+                                            {% if patient.is_diabetique %}
+                                                <span class="badge bg-danger ms-2">Diabétique</span>
+                                            {% endif %}
+                                             {% if patient.is_keratoconique %}
+                                                <span class="badge bg-warning text-dark ms-2">Kératoconique</span>
+                                            {% endif %}
+                                            {% if patient.is_cataracte %}
+                                                <span class="badge bg-info text-dark ms-2">Cataracte</span>
+                                            {% endif %}
+                                        </h6>
                                         <small class="text-muted">Date de naissance: {{ patient.date_of_birth }}</small>
                                     </div>
                                     <div class="btn-group">
